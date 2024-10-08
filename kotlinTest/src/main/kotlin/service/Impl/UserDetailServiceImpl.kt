@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 class UserDetailServiceImpl(
     private val userDao: UserDao,
 ): UserDetailsService {
-    override fun loadUserByUsername(username: String?): UserDetails {
+    override fun loadUserByUsername(username: String): UserDetails {
         //根据用户名查询用户信息
         var user = userDao.getOne(KtQueryWrapper(User::class.java).eq(User::name, username))
         if (user == null) {

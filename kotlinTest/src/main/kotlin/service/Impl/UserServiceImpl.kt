@@ -25,8 +25,7 @@ open class UserServiceImpl(
             eq("name",user.name)
         }
 
-        userDao.count(KtQueryWrapper(User::class.java).eq(User::name, user.name))
-        if(userDao.count(wrapper) > 0){
+        if(userDao.count(KtQueryWrapper(User::class.java).eq(User::name, user.name)) > 0){
             return fail("该用户已存在")
         }
         //密码加密

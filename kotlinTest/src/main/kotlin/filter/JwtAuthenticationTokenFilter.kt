@@ -54,7 +54,6 @@ open class JwtAuthenticationTokenFilter(
         filterChain.doFilter(request, response)
     }
 }*/
-@Component
 open class JwtAuthenticationTokenFilter: OncePerRequestFilter(){
     companion object{
         private const val AUTH_HEADER = "Authorization"
@@ -71,12 +70,12 @@ open class JwtAuthenticationTokenFilter: OncePerRequestFilter(){
         filterChain: FilterChain
     ) {
         //从请求头中获取token
-        var header: String = request.getHeader(AUTH_HEADER)
-        if (Objects.isNull(header) || !header.startsWith(AUTH_HEADER_TYPE)) {
+        var header: String? = request.getHeader(AUTH_HEADER)
+        if (Objects.isNull(header)) {
             filterChain.doFilter(request, response)
             return
         }
-        var token: String = header.split(" ")[1]
+        var token: String? = header
         //验证token
         if (!JWTUtil.verify(token, jwtProperties.userSecretKey!!.toByteArray(Charsets.UTF_8))) {
             filterChain.doFilter(request,response)

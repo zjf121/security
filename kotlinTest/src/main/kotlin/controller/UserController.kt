@@ -1,7 +1,6 @@
 package org.example.controller
 
 import cn.hutool.jwt.JWT
-import cn.hutool.jwt.JWTUtil
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import org.example.dao.UserDao
 import org.example.jwt.JwtProperties
@@ -12,7 +11,6 @@ import org.example.vo.ok
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -78,8 +76,7 @@ class UserController(
             .setPayload("username", name)
             .setKey(jwtProperties.userSecretKey!!.toByteArray(Charsets.UTF_8))
             .sign()
-
-
+        println("token:$token")
         return ok(token)
     }
 
@@ -92,6 +89,12 @@ class UserController(
             eq(user.age != null, "age", user.age)
             eq("1", "1")
         }
+        /*KtQueryWrapper(User::class.java).apply {
+            like(user.name != null,User::name, user.name)
+            like(user.address != null,User::address, user.address)
+            eq(user.age != null,User::age, user.age)
+            eq(1,1)
+        }*/
         val list = userDao.list(wrapper)
         if (list.isEmpty()) {
             return ok(Collections.emptyList<String>())

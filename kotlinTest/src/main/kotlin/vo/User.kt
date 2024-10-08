@@ -1,5 +1,6 @@
 package org.example.vo
 
+import com.baomidou.mybatisplus.annotation.IdType
 import com.baomidou.mybatisplus.annotation.TableId
 import com.baomidou.mybatisplus.annotation.TableName
 import org.springframework.context.annotation.Bean
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component
 @Component
 @TableName("user")
 data class User(
-    @TableId(value = "id")
+    @TableId(value = "id", type = IdType.AUTO)
     var id: Int? = null,
     var name: String? = null,
     var age: Int? = null,
