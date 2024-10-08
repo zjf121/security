@@ -6,5 +6,5 @@ import org.example.vo.User
 import org.springframework.stereotype.Service
 
 interface UserService {
-    fun register(user: User): ResultVo<Boolean>
+    fun register(user: User): ResultVo<Any>
 }

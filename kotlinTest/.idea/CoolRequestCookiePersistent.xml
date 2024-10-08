@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CoolRequestCookiePersistent">
-    <option name="cookies" value="[]" />
+    <option name="cookies" value="[{&quot;domain&quot;:&quot;http://localhost&quot;,&quot;infos&quot;:[{&quot;createTimeMillis&quot;:1727588723216,&quot;raw&quot;:&quot;JSESSIONID\u003dD3E623DCA29D5BE6F3FA0A4BE85CE0EC; Path\u003d/; HttpOnly&quot;,&quot;requestURL&quot;:&quot;http://localhost:8080/user/loginuser?name\u003dzhangjingfu\u0026password\u003d123456&quot;}]}]" />
   </component>
 </project>
