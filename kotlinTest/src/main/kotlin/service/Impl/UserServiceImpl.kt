@@ -32,6 +32,7 @@ open class UserServiceImpl(
         var password = passwordEncoder?.encode(user.password)
         user.password = password
         user.status = 0
+        user.role = "user"
         //实现注册
         return ok(userDao.save(user))
     }

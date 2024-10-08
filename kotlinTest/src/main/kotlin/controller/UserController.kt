@@ -2,6 +2,7 @@ package org.example.controller
 
 import cn.hutool.jwt.JWT
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
+import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
 import org.example.dao.UserDao
 import org.example.jwt.JwtProperties
 import org.example.service.UserService
@@ -17,14 +18,14 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.access.prepost.PreAuthorize
 import java.util.*
 
 @RestController
 @RequestMapping("/user")
-class UserController(
+open class UserController(
     private val userService: UserService,
     private val userDao: UserDao,
-    private val passwordEncoder: PasswordEncoder,
     private val authenticationManager: AuthenticationManager,
 ) {
 
@@ -40,7 +41,7 @@ class UserController(
 
     //登录
     @GetMapping("/login")
-    fun login(name: String, password: String): ResultVo<Any> {
+    open fun login(name: String, password: String): ResultVo<Any> {
         /*var wrapper = QueryWrapper<User>().apply {
             eq("name",name)
         }
@@ -67,7 +68,7 @@ class UserController(
         // 使用security，用户提交用户名和密码，通过提供的类，将用户信息封装
         var usernamePasswordAuthenticationToken: UsernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(name, password)
         //校验用户名和密码是否正确，然后生成用户凭据（内部重写UserDetailsService的用户名密码校验逻辑）
-        var authenticate: Authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken)
+        var authenticate: Authentication? = authenticationManager.authenticate(usernamePasswordAuthenticationToken)
         if (Objects.isNull(authenticate)) {
             throw RuntimeException("用户名或密码错误")
         }
@@ -82,24 +83,25 @@ class UserController(
 
     //查询展示数据
     @GetMapping("/show")
-    fun show(user: User): ResultVo<Any> {
-        var wrapper = QueryWrapper<User>().apply {
+    @PreAuthorize("hasRole('ROLE_admin')")
+    open fun show(user: User): ResultVo<Any> {
+        var wrapper = QueryWrapper<User?>().apply {
             like(user.name != null, "name", user.name)
             like(user.address != null, "address", user.address)
             eq(user.age != null, "age", user.age)
-            eq("1", "1")
+            eq("1", 1)
         }
         /*KtQueryWrapper(User::class.java).apply {
             like(user.name != null,User::name, user.name)
             like(user.address != null,User::address, user.address)
             eq(user.age != null,User::age, user.age)
-            eq(1,1)
         }*/
-        val list = userDao.list(wrapper)
-        if (list.isEmpty()) {
+        /**/
+        val list: List<User>? = userDao.list(wrapper)
+        if (list!!.isEmpty()) {
             return ok(Collections.emptyList<String>())
         }
-        return ok(list)
 
+        return ok(list)
     }
 }

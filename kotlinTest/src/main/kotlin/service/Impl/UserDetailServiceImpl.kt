@@ -18,10 +18,11 @@ class UserDetailServiceImpl(
         if (user == null) {
             throw RuntimeException("用户名不存在")
         }
+
         val userDetails: UserDetails = org.springframework.security.core.userdetails.User
             .withUsername(user.name)
             .password(user.password)
-            .authorities("admin")
+            .authorities("ROLE_" + user.role)
             .build()
         return userDetails
     }

@@ -57,7 +57,6 @@ open class JwtAuthenticationTokenFilter(
 open class JwtAuthenticationTokenFilter: OncePerRequestFilter(){
     companion object{
         private const val AUTH_HEADER = "Authorization"
-        private const val AUTH_HEADER_TYPE = "Bearer "
     }
 
     @Autowired
@@ -72,6 +71,7 @@ open class JwtAuthenticationTokenFilter: OncePerRequestFilter(){
         //从请求头中获取token
         var header: String? = request.getHeader(AUTH_HEADER)
         if (Objects.isNull(header)) {
+            //用户未登录
             filterChain.doFilter(request, response)
             return
         }
@@ -90,6 +90,7 @@ open class JwtAuthenticationTokenFilter: OncePerRequestFilter(){
 
         //保存到环境上下文
         SecurityContextHolder.getContext().authentication = authenticationToken
+        println(SecurityContextHolder.getContext())
         filterChain.doFilter(request, response)
     }
 
